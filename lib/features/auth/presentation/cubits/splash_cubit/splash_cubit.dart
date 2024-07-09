@@ -3,26 +3,29 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 part 'splash_state.dart';
 
 class SplashCubit extends Cubit<SplashState> {
-  SplashCubit() : super(SplashState(isVpnConnected: null, isConnectionOn: null));
+  SplashCubit() : super(SplashState(
+      isVpnConnected: null,
+      internetEnum: InternetEnum.loading
+  ));
 
-  void check() async {
+  void checkConnection() async {
+    emit(state.copyWith(newInternetEnum: InternetEnum.loading));
 
     final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
 
-    // for connection Internet
-
     if (connectivityResult.contains(ConnectivityResult.mobile) || connectivityResult.contains(ConnectivityResult.wifi) || connectivityResult.contains(ConnectivityResult.ethernet)){
-      print(" Connection True !!!!!!");
-      emit(state.copyWith(newIsConnectionOn: true));
-
+      emit(state.copyWith(newInternetEnum: InternetEnum.connectionOn));
     }else {
-      print(" Connection fals !!!!!!");
-      emit(state.copyWith(newIsConnectionOn: false));
+      emit(state.copyWith(newInternetEnum: InternetEnum.connectionOff));
     }
+  }
+
+  void checkVpn() async {
+    final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
 
     // for connection VPN
     if (connectivityResult.contains(ConnectivityResult.vpn)){
-        emit(state.copyWith(newIsVpnConnected: true ));
+      emit(state.copyWith(newIsVpnConnected: true ));
     }
     else{
       emit(state.copyWith(newIsVpnConnected:false ));

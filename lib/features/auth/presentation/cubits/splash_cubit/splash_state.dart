@@ -2,21 +2,26 @@ part of 'splash_cubit.dart';
 
 class SplashState {
   bool? isVpnConnected;
-  bool? isConnectionOn;
+  InternetEnum internetEnum;
 
     SplashState({
     required this.isVpnConnected,
-    required this.isConnectionOn,
+    required this.internetEnum,
      });
 
   SplashState copyWith({
     bool? newIsVpnConnected,
-    bool? newIsConnectionOn,
+    InternetEnum? newInternetEnum,
    }){
     return SplashState(
       isVpnConnected: newIsVpnConnected ?? isVpnConnected,
-      isConnectionOn: newIsConnectionOn ?? isConnectionOn,
+      internetEnum: newInternetEnum ?? internetEnum,
     );
   }
+}
 
+enum InternetEnum {
+  loading,
+  connectionOn,
+  connectionOff
 }
